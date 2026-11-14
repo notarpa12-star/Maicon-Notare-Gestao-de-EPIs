@@ -1,0 +1,14 @@
+{
+  "name": "bc2-epi-seguro",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create bc2-seguro-db",
+    "db:migrate": "wrangler d1 migrations apply bc2-seguro-db --remote",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

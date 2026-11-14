@@ -1,0 +1,12 @@
+node_modules/
+.wrangler/
+.dev.vars
+backup-BC2-*.sql
+
+backups/
+*.zip
+*.sqlite*
+*.db
+.env*
+.dev.vars*
+PUBLICAR-WORKER.mjs

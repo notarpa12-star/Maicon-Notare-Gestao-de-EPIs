@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "estoque",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-04",
+  "assets": {
+    "directory": "./site",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "ratelimits": [
+    {
+      "name": "USER_API_LIMITER",
+      "namespace_id": "PREENCHER_ID_LIMITADOR",
+      "simple": {
+        "limit": 240,
+        "period": 60
+      }
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bc2-seguro-db",
+      "database_id": "PREENCHER_ID_D1",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "vars": {
+    "ADMIN_EMAIL": "admin@example.com",
+    "FIREBASE_PROJECT_ID": "PREENCHER_PROJETO_FIREBASE"
+  },
+  "access": {
+    "dev": {
+      "aud": "bc2-local-test",
+      "identity": {
+        "email": "admin@example.com",
+        "name": "Administrador de teste"
+      }
+    }
+  }
+}
