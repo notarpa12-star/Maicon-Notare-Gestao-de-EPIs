@@ -1,0 +1,24 @@
+#bc2NewEpi { margin-top: 24px; padding: clamp(16px, 3vw, 30px); border: 2px solid var(--green); border-radius: 14px; background: var(--white); color: var(--text); scroll-margin-top: 20px; }
+#bc2NewEpi[hidden], #bc2NewEpi [hidden] { display: none !important; }
+#bc2NewEpi h3 { margin: 0 0 8px; font-size: 24px; }
+#bc2NewEpi fieldset { border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 18px 0; min-width: 0; }
+#bc2NewEpi legend { padding: 0 8px; font-weight: bold; color: var(--green); }
+#bc2NewEpi .bc2-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+#bc2NewEpi .bc2-full { grid-column: 1 / -1; }
+#bc2NewEpi input:not([type=checkbox]), #bc2NewEpi select, #bc2NewEpi textarea { width: 100%; min-width: 0; }
+#bc2NewEpi label { display: block; font-weight: bold; margin-bottom: 6px; }
+#bc2NewEpi .bc2-check { display: flex; align-items: flex-start; gap: 10px; font-weight: normal; padding: 8px 0; line-height: 1.5; }
+#bc2NewEpi input[type=checkbox] { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 2px; }
+#bc2NewEpi small { display: block; color: var(--muted); margin-top: 5px; overflow-wrap: anywhere; }
+#bc2NewEpi .bc2-source-card { border: 1px solid var(--border); padding: 16px; border-radius: 9px; margin: 12px 0; overflow-wrap: anywhere; }
+#bc2NewEpi .bc2-source-card dl { display: grid; grid-template-columns: minmax(90px, 1fr) 3fr; gap: 8px; }
+#bc2NewEpi .bc2-source-card dd { margin: 0; }
+#bc2NewEpi .bc2-preview { max-width: 260px; max-height: 220px; object-fit: contain; display: block; margin: 12px 0; }
+#bc2NewEpi .bc2-total { background: #edf6ed; color: #143e29; font-size: 22px; font-weight: bold; padding: 18px; border-radius: 8px; margin: 12px 0; }
+#bc2NewEpi .bc2-search-links { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0; }
+#bc2NewEpi .bc2-review { white-space: pre-line; background: var(--bg); padding: 16px; border-radius: 8px; line-height: 1.7; overflow-wrap: anywhere; }
+#bc2NewEpi .bc2-error { color: #a31922; font-weight: bold; }
+#bc2NewEpi button { min-height: 44px; }
+#bc2NewEpi button:focus-visible, #bc2NewEpi a:focus-visible, #bc2NewEpi input:focus-visible, #bc2NewEpi select:focus-visible, #bc2NewEpi textarea:focus-visible { outline: 3px solid #865000; outline-offset: 3px; }
+.bc2-stock-unit { display: block; color: var(--muted); font-size: 12px; }
+@media (max-width: 650px) { #bc2NewEpi .bc2-grid { grid-template-columns: 1fr; } #bc2NewEpi fieldset { padding: 12px; } #bc2NewEpi .toolbar { align-items: stretch; } #bc2NewEpi .toolbar > * { flex: 1 1 100%; } }

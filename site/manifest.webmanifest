@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "name": "BC2 | Gestão de EPIs",
+  "short_name": "BC2 EPIs",
+  "description": "Controle de estoque e entregas de EPIs da BC2. Uso somente com internet.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101214",
+  "theme_color": "#111315",
+  "icons": [
+    {
+      "src": "./icons/bc2-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/bc2-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/bc2.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
