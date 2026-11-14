@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS bc2_store_meta (id INTEGER PRIMARY KEY CHECK(id=1),generation TEXT NOT NULL,revision INTEGER NOT NULL,info_json TEXT NOT NULL,last_change_id TEXT,migrated_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bc2_records (generation TEXT NOT NULL,collection TEXT NOT NULL,record_id TEXT NOT NULL CHECK(length(record_id)>0),data_json TEXT NOT NULL CHECK(json_valid(data_json)),version INTEGER NOT NULL,deleted INTEGER NOT NULL DEFAULT 0,sort_order INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(generation,collection,record_id));
+CREATE TABLE IF NOT EXISTS bc2_commits (operation_id TEXT PRIMARY KEY,actor_id TEXT NOT NULL,fingerprint TEXT NOT NULL,response_json TEXT NOT NULL,created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bc2_imports (id TEXT PRIMARY KEY,actor_id TEXT NOT NULL,base_revision INTEGER NOT NULL,purpose TEXT NOT NULL,status TEXT NOT NULL,manifest_json TEXT NOT NULL,info_json TEXT NOT NULL,created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS bc2_import_chunks (import_id TEXT NOT NULL,chunk INTEGER NOT NULL,fingerprint TEXT NOT NULL,PRIMARY KEY(import_id,chunk));
+CREATE TRIGGER IF NOT EXISTS bc2_legacy_frozen BEFORE UPDATE ON app_state WHEN EXISTS(SELECT 1 FROM bc2_store_meta WHERE id=1) BEGIN SELECT RAISE(ABORT,'BC2 atualizado: recarregue o aplicativo. Cópia anterior preservada.'); END;
+CREATE TRIGGER IF NOT EXISTS bc2_legacy_no_delete BEFORE DELETE ON app_state WHEN EXISTS(SELECT 1 FROM bc2_store_meta WHERE id=1) BEGIN SELECT RAISE(ABORT,'Cópia anterior protegida.'); END;
