@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="bc2">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BC2 | Gestão de EPIs</title>
+
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#111315">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icons/bc2.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./icons/bc2-192.png">
+    <link rel="stylesheet" href="./epi-cadastro.css">
+    <link rel="stylesheet" href="./epi-folders.css">
+    <meta name="bc2-release" content="download-conta-20261109">
+    <style>
+        :root {
+            --green: #176b45;
+            --lime: #c9f36b;
+            --bg: #edf3ee;
+            --white: #fff;
+            --text: #1d2b23;
+            --muted: #526359;
+            --border: #cbd8ce;
+            --red: #b4232d;
+            --amber: #865000;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        [hidden] { display: none !important; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        header {
+            background: var(--green);
+            color: white;
+            padding: 22px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px
+        }
+
+        .logo {
+            background: var(--lime);
+            color: var(--green);
+            font-weight: bold;
+            padding: 13px;
+            border-radius: 12px
+        }
+
+        header h1 {
+            font-size: 21px;
+            margin: 0 0 5px
+        }
+
+        header p {
+            margin: 0;
+            color: #e3f2e8;
+            font-size: 13px
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .header-actions button {
+            border: 1px solid #8ab49a;
+            border-radius: 8px;
+            padding: 10px 13px;
+            background: #215f43;
+            color: white;
+            font-weight: 700
+        }
+
+        .header-actions button:hover {
+            background: #2a7652;
+            border-color: #a9d8b7
+        }
+
+        .header-actions button.secondary {
+            background: #215f43;
+            color: white;
+            border-color: #8ab49a
+        }
+
+        .header-actions button.secondary:hover {
+            background: #2a7652;
+            border-color: #a9d8b7
+        }
+
+        .header-actions button.danger {
+            background: #215f43;
+            color: white;
+            border-color: #8ab49a
+        }
+
+        .header-actions button.danger:hover {
+            background: #2a7652;
+            border-color: #a9d8b7
+        }
+
+        .header-actions input[type="file"] {
+            display: none
+        }
+
+        main {
+            max-width: 1400px;
+            margin: auto;
+            padding: 24px
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px
+        }
+
+        nav button {
+            border: 1px solid #b9cbbd;
+            background: white;
+            border-radius: 9px;
+            padding: 11px 15px;
+            color: var(--text)
+        }
+
+        nav button:hover {
+            border-color: var(--green);
+            color: var(--green)
+        }
+
+        nav button.active {
+            background: var(--green);
+            color: white;
+            border-color: var(--green)
+        }
+
+        nav button.active:hover {
+            background: #125638
+        }
+
+        h2 {
+            font-size: 23px;
+            margin: 0 0 7px
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin: 0 0 22px;
+            font-size: 14px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 22px
+        }
+
+        .card,
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 18px
+        }
+
+        .card {
+            border-top: 4px solid var(--green);
+            box-shadow: 0 3px 10px #173d2812
+        }
+
+        .card .label {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .card .number {
+            font-size: 29px;
+            font-weight: bold;
+            margin: 12px 0 5px
+        }
+
+        .card .hint {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 16px 0
+        }
+
+        .toolbar input,
+        .toolbar select {
+            flex: 1;
+            min-width: 170px
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #b9cbbd;
+            border-radius: 8px;
+            background: white;
+            color: var(--text)
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 3px solid #176b4533;
+            border-color: var(--green)
+        }
+
+        textarea {
+            min-height: 85px;
+            resize: vertical
+        }
+
+        .btn {
+            border: 0;
+            background: var(--green);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-weight: 600
+        }
+
+        .btn:hover {
+            background: #125638
+        }
+
+        .btn.secondary {
+            background: white;
+            color: var(--green);
+            border: 1px solid #a9c0ae
+        }
+
+        .btn.secondary:hover {
+            background: #e7f2e9
+        }
+
+        .btn.danger {
+            background: #ffeded;
+            color: var(--red);
+            border: 1px solid #e5aeb2
+        }
+
+        .btn.small {
+            padding: 7px 9px;
+            font-size: 12px
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 720px;
+            font-size: 13px
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top
+        }
+
+        th {
+            background: #e8f0e9;
+            color: var(--muted);
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        tr:last-child td {
+            border-bottom: 0
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .badge {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 5px 8px;
+            background: #dcefe0;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: bold
+        }
+
+        .badge.warn {
+            background: #ffedb8;
+            color: var(--amber)
+        }
+
+        .badge.danger {
+            background: #ffdddd;
+            color: var(--red)
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        .empty {
+            padding: 32px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        .section {
+            display: none
+        }
+
+        .section.active {
+            display: block
+        }
+
+        .access-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: grid;
+            place-items: center;
+            align-items: center;
+            padding: 24px;
+            background: #f3f7f3;
+            overflow-y: auto;
+        }
+
+        .access-gate[hidden] {
+            display: none;
+        }
+
+        .access-gate-card {
+            width: min(100%, 760px);
+            padding: clamp(22px, 5vw, 42px);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: 0 18px 55px #173c2722;
+        }
+
+        .access-gate-card.auth-subpage { width: min(100%, 480px); }
+        .auth-back-bottom { display: block; margin: 18px auto 0; }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        .support-card {
+            padding: 18px;
+            border: 1px solid #41474c;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #252a2e, #1a1d20);
+        }
+
+        .support-card h3 { margin: 0 0 8px; }
+        .support-card p { color: var(--muted); }
+        .support-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+
+        @media(max-width:520px) {
+            .access-gate { padding: 12px; }
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .auth-brand .logo {
+            min-width: 58px;
+            min-height: 58px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            border-radius: 17px;
+            box-shadow: 0 5px 14px #176b4524;
+        }
+
+        .auth-brand h1 {
+            margin: 0 0 5px;
+            font-size: clamp(24px, 5vw, 32px);
+            letter-spacing: -.6px;
+        }
+
+        .auth-brand p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .auth-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .auth-choice {
+            min-height: 190px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            color: var(--text);
+            background: linear-gradient(145deg, #fff 60%, #f2f8f1);
+            box-shadow: 0 5px 16px #173c270d;
+            transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .auth-choice:hover,
+        .auth-choice:focus-visible {
+            transform: translateY(-2px);
+            border-color: var(--green);
+            box-shadow: 0 10px 24px #173c2718;
+            outline: none;
+        }
+
+        .auth-choice-mark {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            margin-bottom: 16px;
+            border-radius: 13px;
+            color: var(--green);
+            background: #e4f4df;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .auth-choice strong {
+            margin-bottom: 7px;
+            font-size: 19px;
+        }
+
+        .auth-choice span:last-child {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .auth-form-view h2 {
+            margin: 12px 0 6px;
+        }
+
+        .auth-form-view .subtitle {
+            line-height: 1.5;
+        }
+
+        .auth-back {
+            padding: 0;
+            border: 0;
+            color: var(--green);
+            background: transparent;
+            font-weight: 700;
+        }
+
+        .auth-back:hover {
+            text-decoration: underline;
+        }
+
+        .auth-submit {
+            width: 100%;
+            justify-content: center;
+            min-height: 48px;
+            margin-top: 8px;
+        }
+
+        .auth-feedback {
+            min-height: 20px;
+            margin: 13px 0 0;
+            line-height: 1.5;
+        }
+
+        .pending-password-box {
+            margin-top: 18px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #f7faf6;
+        }
+
+        .pending-password-box h3 {
+            margin: 0 0 8px;
+        }
+
+        .pending-password-box p {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .permission-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .permission-matrix th,
+        .permission-matrix td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .permission-matrix td:first-child,
+        .permission-matrix th:first-child {
+            text-align: left;
+        }
+
+        .notice {
+            padding: 13px 15px;
+            background: #e1f1df;
+            border-left: 4px solid var(--green);
+            color: #234b31;
+            border-radius: 9px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            line-height: 1.5
+        }
+
+        .notice.warn {
+            background: #fff0c2;
+            border-left-color: var(--amber);
+            color: #624000
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .scanner-video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            min-height: 240px;
+            max-height: 420px;
+            background: #000;
+            border-radius: 10px;
+            object-fit: contain
+        }
+
+        .scanner-placeholder { display:grid; place-items:center; min-height:240px; overflow:hidden; border-radius:10px; background:#000; }
+        .scanner-placeholder .scanner-video { width:100%; }
+        .scanner-empty-hint { padding:14px; color:#d3d8db; text-align:center; }
+        .scanner-fullscreen[hidden] { display:none !important; }
+        .scanner-fullscreen { position:fixed; inset:0; z-index:10050; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:0; background:#000; }
+        body.scanner-active { overflow:hidden; }
+        .scanner-fullscreen .scanner-video { width:100%; height:100%; min-height:0; max-height:none; aspect-ratio:auto; border-radius:0; object-fit:contain; transition:transform .12s ease; }
+        .scanner-exit { position:absolute; top:max(16px,env(safe-area-inset-top)); right:max(16px,env(safe-area-inset-right)); z-index:2; min-height:46px; padding:10px 17px; border:1px solid #fff8; border-radius:999px; color:#fff; background:#090909e8; font-weight:700; box-shadow:0 3px 18px #0009; }
+        .scanner-zoom-controls { position:absolute; left:50%; bottom:max(20px,env(safe-area-inset-bottom)); z-index:2; display:flex; align-items:center; gap:12px; width:min(94vw,540px); padding:12px 14px; transform:translateX(-50%); border:1px solid #ffffff30; border-radius:16px; color:#fff; background:#090909e8; box-shadow:0 4px 24px #000b; }
+        .scanner-zoom-controls button { width:42px; height:42px; flex:0 0 42px; border:1px solid #ffffff60; border-radius:50%; color:#fff; background:#202020; font-size:24px; line-height:1; }
+        .scanner-zoom-controls input { flex:1; min-width:70px; accent-color:#fff; }
+        .scanner-zoom-label { min-width:58px; color:#fff; font-variant-numeric:tabular-nums; text-align:center; }
+        @media(max-width:520px) { .scanner-zoom-controls { gap:8px; padding:10px; } .scanner-exit { min-height:42px; } }
+
+        .scan-result {
+            margin-top: 16px
+        }
+
+        .product-result {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+            gap: 16px;
+            align-items: start
+        }
+
+        .product-result.no-image {
+            grid-template-columns: 1fr
+        }
+
+        .product-result img {
+            display: block;
+            width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: white
+        }
+
+        .product-details {
+            display: grid;
+            grid-template-columns: minmax(110px, .7fr) minmax(0, 1.5fr);
+            gap: 8px 12px;
+            margin: 14px 0
+        }
+
+        .product-details dt {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .product-details dd {
+            margin: 0;
+            overflow-wrap: anywhere
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #12251c99;
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+            padding: 16px
+        }
+
+        .modal-backdrop.open {
+            display: flex
+        }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            width: min(720px, 100%);
+            max-height: 90vh;
+            overflow: auto;
+            padding: 23px
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px
+        }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 20px
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text)
+        }
+
+        .field.full {
+            grid-column: 1/-1
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 20px
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 24px
+        }
+
+        @media(max-width:850px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            main {
+                padding: 15px
+            }
+
+            .two {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:520px) {
+            .access-gate {
+                align-items: start;
+                padding: 12px;
+            }
+
+            .access-gate-card {
+                margin: auto 0;
+                border-radius: 17px;
+            }
+
+            .auth-choice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-choice {
+                min-height: 145px;
+            }
+
+            .auth-brand {
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+
+            .auth-brand .logo {
+                min-width: 48px;
+                min-height: 48px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .card {
+                padding: 13px
+            }
+
+            .card .number {
+                font-size: 24px
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr
+            }
+
+            .field.full {
+                grid-column: auto
+            }
+
+            .product-result {
+                grid-template-columns: 1fr
+            }
+
+            header {
+                padding: 18px
+            }
+
+            .header-actions {
+                justify-content: flex-start;
+                width: 100%
+            }
+        }
+
+        @media print {
+
+            header,
+            nav,
+            .toolbar,
+            .no-print,
+            footer {
+                display: none !important
+            }
+
+            body {
+                background: white
+            }
+
+            main {
+                padding: 0
+            }
+
+            .section {
+                display: none !important
+            }
+
+            .section.active {
+                display: block !important
+            }
+
+            .panel,
+            .card {
+                break-inside: avoid
+            }
+        }
+
+        /* Ajustes visuais para leitura rápida, telas pequenas e agrupamento do estoque. */
+        body {
+            line-height: 1.5;
+            background: #f1f5f2;
+        }
+
+        header {
+            background: linear-gradient(115deg, #105b3d, #176b45 65%, #218052);
+            box-shadow: 0 5px 20px #143e2a20;
+        }
+
+        main {
+            max-width: 1460px;
+            padding-top: 28px;
+        }
+
+        nav {
+            padding: 8px;
+            background: #ffffffd9;
+            border: 1px solid #dbe5de;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px #183d2910;
+        }
+
+        nav button {
+            transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease;
+        }
+
+        nav button:not(.active):hover,
+        .btn.secondary:hover {
+            transform: translateY(-1px);
+        }
+
+        .section > h2 {
+            letter-spacing: -.35px;
+        }
+
+        .subtitle {
+            line-height: 1.55;
+        }
+
+        .card,
+        .panel {
+            border-color: #d7e1d9;
+            box-shadow: 0 5px 18px #183d290c;
+        }
+
+        .card {
+            border-top-width: 5px;
+            transition: transform .16s ease, box-shadow .16s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 23px #183d2915;
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+        }
+
+        .btn:not(:disabled):hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px #153e2b1c;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #176b4540;
+            outline-offset: 2px;
+        }
+
+        .table-wrap {
+            box-shadow: 0 5px 18px #183d290a;
+        }
+
+        tbody tr:not(.folder-row):hover td {
+            background: #f7faf7;
+        }
+
+        .folder-row td {
+            padding-top: 11px;
+            padding-bottom: 11px;
+            background: #eaf4e9;
+            color: #145d3e;
+            border-top: 1px solid #cbdcca;
+        }
+
+        .folder-summary {
+            margin-left: 12px;
+            color: #526359;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .folder-tag {
+            display: inline-block;
+            margin-top: 3px;
+            color: #176b45;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .field-hint {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .section-heading h3,
+        .section-heading p {
+            margin-top: 0;
+        }
+
+        .shortage-panel {
+            margin: 0 0 18px;
+            border-left: 4px solid var(--red);
+        }
+
+        .shortage-panel .section-heading p {
+            margin-bottom: 0;
+            font-size: 13px;
+        }
+
+        .shortage-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px 24px;
+        }
+
+        .shortage-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 11px 0;
+            border-bottom: 1px solid #e5ebe6;
+        }
+
+        .shortage-name,
+        .shortage-amount {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .shortage-name span,
+        .shortage-amount span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .shortage-amount {
+            align-items: flex-end;
+            white-space: nowrap;
+        }
+
+        .shortage-quantity {
+            color: var(--red);
+            font-size: 17px;
+        }
+
+        .users-folder-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        #users [hidden] {
+            display: none !important;
+        }
+
+        .users-folder-card {
+            min-height: 218px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 22px;
+            border: 1px solid #d7e1d9;
+            border-radius: 16px;
+            color: var(--text);
+            background: linear-gradient(145deg, #fff 60%, #f0f7f0);
+            text-align: left;
+            box-shadow: 0 5px 18px #183d290c;
+            transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+        }
+
+        .users-folder-card:hover,
+        .users-folder-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: var(--green);
+            box-shadow: 0 10px 24px #183d2918;
+        }
+
+        .users-folder-icon {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            color: var(--green);
+            background: #e6f3e7;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .users-folder-card strong {
+            font-size: 19px;
+        }
+
+        .users-folder-card > span:not(.users-folder-icon) {
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .users-folder-card .users-folder-count {
+            margin-top: auto;
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .users-page-heading {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: start;
+            gap: 18px;
+            margin-bottom: 14px;
+        }
+
+        .users-page-heading .subtitle {
+            margin-bottom: 0;
+        }
+
+        .pending-access-card {
+            margin: 0 0 12px;
+            border-left: 4px solid #d99a21;
+            background: #fffefa;
+        }
+
+        .pending-access-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .pending-access-head h3,
+        .pending-access-head p {
+            margin: 0;
+        }
+
+        .pending-access-head p {
+            margin-top: 4px;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .pending-access-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .pending-access-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 16px;
+        }
+
+        .pending-access-actions .btn:disabled {
+            cursor: not-allowed;
+            opacity: .5;
+            box-shadow: none;
+            transform: none;
+        }
+
+        @media(max-width:700px) {
+            main {
+                padding: 16px 12px;
+            }
+
+            nav {
+                gap: 6px;
+                padding: 6px;
+            }
+
+            nav button {
+                padding: 9px 11px;
+            }
+
+            .shortage-list {
+                grid-template-columns: 1fr;
+            }
+
+            .users-folder-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .users-page-heading {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .pending-access-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .pending-access-actions {
+                justify-content: stretch;
+            }
+
+            .pending-access-actions .btn {
+                flex: 1;
+            }
+        }
+
+        @media(max-width:520px) {
+            .section-heading {
+                flex-direction: column;
+            }
+
+            .section-heading .btn {
+                width: 100%;
+            }
+
+            .folder-summary {
+                display: block;
+                margin: 4px 0 0;
+            }
+        }
+
+        /* Quatro paletas pessoais: BC2, claro, preto e aurora. */
+        :root[data-theme="bc2"] {
+            color-scheme: dark; --green:#48c78e; --lime:#c9f36b; --bg:#101214; --white:#202326;
+            --text:#f0f2f3; --muted:#b0b7bb; --border:#41464b; --red:#ff727c; --amber:#ffd166;
+            --page-gradient:radial-gradient(ellipse at 15% 0%,#24292d 0,transparent 40%),linear-gradient(145deg,#101214,#171a1d 55%,#0d0f10);
+            --surface-gradient:linear-gradient(145deg,#222629,#1a1d20); --header-surface:rgba(20,22,24,.96);
+            --nav-surface:#171a1d; --nav-button:#272b2f; --nav-hover:#383e43; --active-surface:#c9f36b;
+            --active-text:#101714; --field-surface:#111416; --subtle-surface:#30363a; --row-hover:#292e32;
+            --primary-button:#37a979; --primary-text:#111714; --secondary-surface:#292e32; --secondary-text:#e6e9ea;
+            --link:#8ce0b5; --warning-surface:#443a25; --danger-surface:#48272b; --shadow:0 10px 30px #0003;
+            --folder-surface:linear-gradient(145deg,#272c30,#1b1f22); --dark-detail:#121517;
+        }
+        :root[data-theme="light"] {
+            color-scheme:light; --green:#176b45; --lime:#d8efa0; --bg:#edf3ee; --white:#fff; --text:#1d2b23;
+            --muted:#526359; --border:#cbd8ce; --red:#b4232d; --amber:#865000;
+            --page-gradient:linear-gradient(145deg,#f7faf7,#eaf1eb); --surface-gradient:linear-gradient(145deg,#fff,#f5f8f5);
+            --header-surface:rgba(255,255,255,.96); --nav-surface:#e7eee8; --nav-button:#fff; --nav-hover:#eef5ef;
+            --active-surface:#176b45; --active-text:#fff; --field-surface:#fff; --subtle-surface:#f0f4f1; --row-hover:#edf6ef;
+            --primary-button:#176b45; --primary-text:#fff; --secondary-surface:#e8eee9; --secondary-text:#1d2b23;
+            --link:#176b45; --warning-surface:#fff2d6; --danger-surface:#fde6e8; --shadow:0 10px 30px #17352212;
+            --folder-surface:linear-gradient(145deg,#fff,#f2f7f3); --dark-detail:#f4f7f4;
+        }
+        :root[data-theme="black"] {
+            color-scheme:dark; --green:#56d68b; --lime:#ffe15a; --bg:#050607; --white:#101214; --text:#f5f6f7;
+            --muted:#b1b6bb; --border:#303438; --red:#ff727c; --amber:#ffd166;
+            --page-gradient:linear-gradient(145deg,#050607,#0c0e10 55%,#030404); --surface-gradient:linear-gradient(145deg,#121416,#0c0e10);
+            --header-surface:rgba(8,9,10,.98); --nav-surface:#090a0b; --nav-button:#16181a; --nav-hover:#24272a;
+            --active-surface:#ffe15a; --active-text:#101214; --field-surface:#090a0b; --subtle-surface:#17191b; --row-hover:#1b1e20;
+            --primary-button:#41c882; --primary-text:#061109; --secondary-surface:#191c1f; --secondary-text:#eceff0;
+            --link:#7ce4aa; --warning-surface:#43391f; --danger-surface:#48272b; --shadow:0 10px 30px #0007;
+            --folder-surface:linear-gradient(145deg,#17191b,#0b0d0f); --dark-detail:#080a0b;
+        }
+        :root[data-theme="aurora"] {
+            color-scheme:dark; --green:#46d6c6; --lime:#9aefff; --bg:#08121c; --white:#102132; --text:#eff8ff;
+            --muted:#b1c7d6; --border:#284457; --red:#ff8f9c; --amber:#ffcf70;
+            --page-gradient:radial-gradient(ellipse at 18% 0%,#153549 0,transparent 42%),linear-gradient(145deg,#08121c,#0b1b28 58%,#07111b);
+            --surface-gradient:linear-gradient(145deg,#142a3c,#0d1d2b); --header-surface:rgba(6,18,31,.97);
+            --nav-surface:#0e1d2c; --nav-button:#193248; --nav-hover:#24445c; --active-surface:#9aefff;
+            --active-text:#07212b; --field-surface:#0a1925; --subtle-surface:#193145; --row-hover:#193145;
+            --primary-button:#38aeb0; --primary-text:#05211f; --secondary-surface:#193145; --secondary-text:#eff8ff;
+            --link:#82eadf; --warning-surface:#403823; --danger-surface:#472b35; --shadow:0 10px 30px #0005;
+            --folder-surface:linear-gradient(145deg,#173249,#102333); --dark-detail:#091722;
+        }
+        body { background:var(--page-gradient); color:var(--text); }
+        header { color:var(--text); background:var(--header-surface); border-color:var(--border); box-shadow:var(--shadow); }
+        header p { color:var(--muted); }
+        .logo { color:var(--active-text); background:var(--active-surface); border:1px solid var(--border); font-size:22px; font-weight:900; letter-spacing:.35px; }
+        main { color:var(--text); }
+        nav { color:var(--text); background:var(--nav-surface); border-color:var(--border); }
+        nav button { color:var(--text); background:var(--nav-button); border-color:var(--border); white-space:normal; line-height:1.25; }
+        nav button:not(.active):hover { color:var(--text); background:var(--nav-hover); border-color:var(--green); }
+        nav button.active { color:var(--active-text); background:var(--active-surface); border-color:var(--active-surface); }
+        .card,.panel,.users-folder-card,.pending-access-card,.auth-card,.access-gate-card,.auth-choice,.pending-password-box,.modal,.table-wrap,.notice,.scan-result,
+        .users-page .panel { color:var(--text); background:var(--surface-gradient); border-color:var(--border); box-shadow:var(--shadow); }
+        .access-gate { background:radial-gradient(ellipse at 50% 0%,var(--subtle-surface),var(--bg) 68%); }
+        .auth-choice-mark { color:var(--lime); background:var(--subtle-surface); }
+        .auth-back { color:var(--link); }
+        .header-actions button,.header-actions button.secondary,.header-actions button.danger { color:var(--secondary-text); background:var(--secondary-surface); border-color:var(--border); }
+        .card { border-top-color:var(--green); }
+        .card:hover,.users-folder-card:hover,.users-folder-card:focus-visible { border-color:var(--green); box-shadow:var(--shadow); }
+        .users-folder-icon { color:var(--lime); background:var(--subtle-surface); }
+        .users-folder-card .users-folder-count,.folder-tag { color:var(--lime); }
+        input,select,textarea { color:var(--text); background:var(--field-surface); border-color:var(--border); }
+        input[type="checkbox"] { accent-color:var(--green); }
+        input::placeholder,textarea::placeholder { color:var(--muted); }
+        option { color:var(--text); background:var(--white); }
+        .btn { color:var(--primary-text); background:var(--primary-button); }
+        .btn.secondary { color:var(--secondary-text); background:var(--secondary-surface); border-color:var(--border); }
+        .btn.danger { color:#fff; background:#a8333c; }
+        a { color:var(--link); }
+        .badge { background:var(--subtle-surface); color:var(--text); }
+        .badge.danger,.notice.warn { color:var(--red); background:var(--danger-surface); border-color:var(--red); }
+        .badge.warn { color:var(--amber); background:var(--warning-surface); }
+        .folder-row td { color:var(--text); background:var(--subtle-surface); border-color:var(--border); }
+        .folder-summary,.muted,.subtitle,.field-hint { color:var(--muted); }
+        .shortage-item { border-color:var(--border); }
+        .table-wrap { overflow:auto; }
+        table { color:var(--text); }
+        th { color:var(--text); background:var(--subtle-surface); border-color:var(--border); }
+        td { border-color:var(--border); }
+        tbody tr:not(.folder-row):hover td { background:var(--row-hover); }
+        .section.active { animation:bc2-enter .22s ease-out; }
+        @keyframes bc2-enter { from { opacity:.72; transform:translateY(3px) } to { opacity:1; transform:none } }
+        #epiFolders[hidden],#epiFolderContents[hidden],#epiZeroStockSection[hidden] { display:none!important; }
+        .epi-zero-stock { margin-top:22px; border:1px solid var(--border); border-radius:14px; background:var(--white); color:var(--text); }
+        .epi-zero-stock > summary { padding:14px 16px; color:var(--muted); font-weight:700; cursor:pointer; }
+        .epi-zero-stock > p { margin:0; padding:0 16px 4px; color:var(--muted); font-size:13px; }
+        .epi-zero-stock .epi-folder-grid { padding:0 14px 14px; }
+        .epi-folder-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr)); gap:14px; margin-top:14px; }
+        .epi-folder-card { width:100%; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:12px 16px; padding:18px; text-align:left; border:1px solid var(--border); border-radius:15px; background:var(--folder-surface); color:var(--text); box-shadow:var(--shadow); }
+        .epi-folder-card:hover,.epi-folder-card:focus-visible { border-color:var(--green); transform:translateY(-2px); }
+        .epi-folder-heading { display:flex; align-items:center; gap:10px; min-width:0; }
+        .epi-folder-heading .folder-icon { position:relative; display:inline-block; flex:0 0 34px; width:34px; height:24px; margin-top:5px; border:1px solid var(--green); border-radius:4px 5px 5px 5px; background:var(--subtle-surface); box-shadow:inset 0 1px 0 #ffffff24; }
+        .epi-folder-heading .folder-icon::before { content:""; position:absolute; top:-6px; left:1px; width:14px; height:6px; border:1px solid var(--green); border-bottom:0; border-radius:4px 4px 0 0; background:var(--subtle-surface); }
+        .epi-folder-heading .folder-icon::after { content:""; position:absolute; top:6px; left:4px; right:4px; height:2px; border-radius:2px; background:var(--green); opacity:.75; }
+        .epi-folder-heading strong { min-width:0; font-size:18px; overflow-wrap:anywhere; }
+        .epi-folder-total { grid-column:2; grid-row:1 / span 3; display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:76px; padding:10px; border:1px solid var(--border); border-radius:13px; background:var(--dark-detail); }
+        .epi-folder-total strong { color:var(--lime); font-size:29px; line-height:1.05; font-variant-numeric:tabular-nums; }
+        .epi-folder-total span { margin-top:4px; color:var(--muted); font-size:11px; text-align:center; }
+        .epi-folder-sizes { display:flex; flex-wrap:wrap; gap:6px; }
+        .epi-size-chip { display:inline-flex; align-items:center; gap:6px; padding:5px 8px; border:1px solid var(--border); border-radius:999px; color:var(--text); background:var(--subtle-surface); font-size:12px; }
+        .epi-size-chip strong { color:var(--lime); }
+        .epi-size-chip small { color:var(--muted); font-size:11px; }
+        .epi-folder-ca { grid-column:1; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
+        .epi-folder-ca strong { color:var(--text); font-weight:700; }
+        .epi-folder-open-hint { grid-column:1; color:var(--link); font-size:12px; font-weight:700; }
+        .epi-folder-toolbar { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:12px; margin:6px 0 14px; }
+        .epi-folder-toolbar h3 { margin:0; }
+        .epi-folder-summary { margin:4px 0 0; color:var(--muted); font-size:13px; overflow-wrap:anywhere; }
+        .epi-variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr)); gap:14px; margin-top:14px; }
+        .epi-variant-card { min-width:0; padding:17px; border:1px solid var(--border); border-radius:15px; background:var(--surface-gradient); box-shadow:var(--shadow); }
+        .epi-variant-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+        .epi-variant-heading h3 { margin:2px 0 0; font-size:17px; overflow-wrap:anywhere; }
+        .epi-variant-size { display:inline-block; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--text); background:var(--subtle-surface); font-size:12px; font-weight:700; }
+        .epi-variant-available { flex:0 0 auto; display:flex; align-items:baseline; gap:5px; color:var(--green); white-space:nowrap; }
+        .epi-variant-available strong { font-size:29px; line-height:1; font-variant-numeric:tabular-nums; }
+        .epi-variant-available span { color:var(--muted); font-size:11px; }
+        .epi-variant-available.is-low { color:var(--red); }
+        .epi-variant-ca { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-top:14px; padding:11px 12px; border:1px solid var(--border); border-radius:10px; background:var(--dark-detail); }
+        .epi-variant-ca span { color:var(--muted); font-size:12px; }
+        .epi-variant-ca strong { color:var(--text); font-size:15px; overflow-wrap:anywhere; text-align:right; }
+        .epi-variant-details { margin-top:11px; }
+        .epi-variant-details summary { color:var(--muted); cursor:pointer; font-size:12px; }
+        .epi-variant-details dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px 12px; margin:12px 0 0; }
+        .epi-variant-details dl div { min-width:0; }
+        .epi-variant-details dt { color:var(--muted); font-size:11px; }
+        .epi-variant-details dd { margin:2px 0 0; color:var(--text); font-size:12px; overflow-wrap:anywhere; }
+        .epi-variant-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+        body.users-access-page > header, body.users-access-page #nav,
+        body.users-access-page main > footer { display:none !important; }
+        body.users-access-page .section:not(#users) { display:none !important; }
+        body.users-access-page #users { display:block; }
+        .users-folder-grid [hidden] { display:none !important; }
+        body.personal-settings-page > header,
+        body.personal-settings-page #nav,
+        body.personal-settings-page main > footer { display:none !important; }
+        body.personal-settings-page .section:not(#personalSettings) { display:none !important; }
+        body.personal-settings-page #personalSettings { display:block; }
+        .personal-settings { max-width:980px; margin:0 auto; }
+        .personal-settings-heading { display:flex; align-items:flex-start; gap:16px; margin-bottom:20px; }
+        .personal-settings-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+        .personal-settings-card { padding:20px; border:1px solid var(--border); border-radius:16px; background:var(--surface-gradient); box-shadow:var(--shadow); }
+        .personal-settings-card h3 { margin:0 0 8px; }
+        .personal-settings-card .field { margin-top:14px; }
+        .settings-feedback { min-height:22px; margin:12px 0 0; color:var(--muted); font-size:13px; }
+        .theme-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:14px; }
+        .theme-option { display:flex; align-items:center; gap:12px; min-height:70px; padding:12px; text-align:left; border:1px solid var(--border); border-radius:12px; color:var(--text); background:var(--subtle-surface); }
+        .theme-option[aria-pressed="true"] { outline:2px solid var(--green); border-color:var(--green); }
+        .theme-swatch { display:flex; flex:0 0 42px; height:36px; overflow:hidden; border:1px solid var(--border); border-radius:8px; }
+        .theme-swatch i { flex:1; }
+        .theme-swatch-bc2 i:nth-child(1) { background:#101214; }.theme-swatch-bc2 i:nth-child(2) { background:#202326; }.theme-swatch-bc2 i:nth-child(3) { background:#c9f36b; }
+        .theme-swatch-light i:nth-child(1) { background:#edf3ee; }.theme-swatch-light i:nth-child(2) { background:#fff; }.theme-swatch-light i:nth-child(3) { background:#176b45; }
+        .theme-swatch-black i:nth-child(1) { background:#050607; }.theme-swatch-black i:nth-child(2) { background:#101214; }.theme-swatch-black i:nth-child(3) { background:#ffe15a; }
+        .theme-swatch-aurora i:nth-child(1) { background:#08121c; }.theme-swatch-aurora i:nth-child(2) { background:#102132; }.theme-swatch-aurora i:nth-child(3) { background:#9aefff; }
+        .settings-account-summary { display:grid; gap:4px; padding:12px; border-radius:10px; color:var(--text); background:var(--subtle-surface); overflow-wrap:anywhere; }
+        .settings-account-summary small { color:var(--muted); }
+        @media(max-width:680px) { .epi-folder-toolbar { grid-template-columns:1fr; align-items:stretch; } .epi-folder-toolbar .btn { width:100%; } .personal-settings-grid { grid-template-columns:1fr; } }
+        @media(max-width:520px) { .epi-folder-grid,.epi-variant-grid { grid-template-columns:1fr; gap:10px; } .epi-folder-card { padding:15px; } .epi-variant-card { padding:14px; } .epi-variant-details dl,.theme-options { grid-template-columns:1fr 1fr; } .personal-settings-heading { flex-direction:column; } }
+        .install-app-card{margin:0 0 24px;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--light)}
+        .install-app-card .btn{width:100%;min-height:46px}
+        .install-app-card p{margin:9px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}
+        .install-app-card #installAppFeedback:empty{display:none}
+        .install-app-help{width:min(480px,calc(100% - 32px));max-height:85dvh;overflow:auto;border:1px solid var(--border);border-radius:18px;padding:26px;background:var(--white);color:var(--text)}
+        .install-app-help::backdrop{background:#102a1bbb}.install-app-help h2{font-size:22px;margin-top:0}.install-app-help p,.install-app-help li{line-height:1.65}.install-app-help li{margin-bottom:12px}
+        .scanner-photo-result{margin-top:16px}.scanner-photo-result canvas{max-width:100%;max-height:280px;object-fit:contain;border:1px solid var(--border);border-radius:12px;background:white}
+        #scannerCodeChoices{flex-direction:column;align-items:stretch;overflow-wrap:anywhere}
+        .scanner-capture-hint{position:absolute;top:78px;left:20px;right:20px;color:white;background:#0009;padding:12px;border-radius:8px;text-align:center;z-index:2;pointer-events:none}
+        .scanner-capture{position:absolute;bottom:calc(100px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:3;min-height:52px;min-width:200px;border:2px solid white;border-radius:28px}
+    </style>
+    <link rel="stylesheet" href="./mobile.css">
+</head>
+
+<body class="connection-blocked">
+    <div id="connectionGate" class="connection-gate" role="alert" aria-live="polite">
+        <div class="connection-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 8a15 15 0 0 1 18 0 M6 12a10 10 0 0 1 12 0 M9 16a5 5 0 0 1 6 0 M12 20h.01 M2 2l20 20"/></svg>
+            <h1>Conecte-se para usar o BC2</h1><p>O aplicativo funciona somente com internet e conexão com o servidor. Confira o Wi-Fi ou os dados móveis e tente novamente.</p>
+            <button id="connectionRetry" type="button">Tentar novamente</button>
+        </div>
+    </div>
+    <div id="mobileHeader" hidden>
+        <button id="mobileMenuTrigger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16 M4 12h16 M4 18h16"/></svg></button>
+        <button id="mobileBrand" type="button" aria-label="BC2, voltar ao início"><strong>BC2</strong><span>EPIs</span></button>
+        <button id="mobileProfile" type="button" aria-label="Minha conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></button>
+    </div>
+    <div id="mobileMenu" hidden role="dialog" aria-modal="true" aria-label="Menu do BC2">
+        <div class="mobile-drawer"><div class="mobile-drawer-head"><strong>BC2 EPIs</strong><button id="mobileMenuClose" type="button" aria-label="Fechar menu">×</button></div><button id="mobileMenuHome" type="button">Início</button><div id="mobileMenuLinks"></div><button type="button" class="mobile-signout" data-ui-action="signOut">Sair da conta</button></div>
+    </div>
+    <header>
+        <div class="brand">
+            <div class="logo">BC2</div>
+            <div>
+                <h1>Gestão de EPIs</h1>
+                <p>BC2 Infra Estrutura · Controle de segurança</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span id="signedInAs" style="font-size:12px">Acesso protegido</span>
+            <button id="personalSettingsTrigger" type="button" class="secondary small" data-ui-action="openPersonalSettings" hidden>Configurações pessoais</button>
+            <button type="button" class="secondary small" data-ui-action="signOut">Sair</button>
+        </div>
+    </header>
+
+    <main>
+        <nav id="nav">
+            <button class="active" data-tab="dashboard">Visão geral</button>
+            <button data-tab="epis">Estoque de EPIs</button>
+            <button data-tab="scanner">Leitor de código</button>
+            <button data-tab="employees">Colaboradores</button>
+            <button data-tab="movements">Entregas e movimentações</button>
+            <button data-tab="inspections">Inspeções e testes</button>
+            <button data-tab="reports">Relatórios e backup</button>
+            <button data-tab="support">Contatos e Suporte</button>
+            <button data-tab="users" hidden>Usuários e níveis</button>
+            <button data-tab="audit" hidden>Log do site</button>
+        </nav>
+
+        <div id="mobilePageBar" hidden><button id="mobileGoHome" type="button">← Início</button><h2 id="mobilePageTitle"></h2></div>
+        <div id="mobileHome" hidden>
+            <div class="mobile-greeting"><h2 id="mobileGreeting">Bem-vindo ao BC2</h2><p>O que você precisa fazer hoje?</p></div>
+            <div id="mobileTiles" class="mobile-tiles"></div>
+            <p class="mobile-home-foot"><i aria-hidden="true"></i>Conectado ao BC2 · uso com internet</p>
+        </div>
+        <section id="personalSettings" class="section personal-settings">
+            <div class="personal-settings-heading">
+                <button class="btn secondary" type="button" data-ui-action="backFromPersonalSettings">← Voltar</button>
+                <div><h2 id="personalSettingsTitle" tabindex="-1">Configurações pessoais</h2><p class="subtitle">Altere os dados da sua conta e escolha como o BC2 aparece para você.</p></div>
+            </div>
+            <div class="personal-settings-grid">
+                <article class="personal-settings-card">
+                    <h3>Minha conta</h3>
+                    <div class="settings-account-summary"><strong id="personalCurrentName">—</strong><small id="personalCurrentEmail">—</small></div>
+                    <form id="personalNameForm" data-ui-submit="savePersonalName">
+                        <div class="field"><label for="personalName">Meu nome</label><input id="personalName" maxlength="120" autocomplete="name" required></div>
+                        <div class="toolbar"><button class="btn" type="submit">Salvar nome</button></div>
+                    </form>
+                    <p id="personalNameFeedback" class="settings-feedback" role="status"></p>
+                </article>
+                <article class="personal-settings-card">
+                    <h3>Tema de cores</h3>
+                    <p class="muted">Sua escolha é salva na conta e acompanha você em outros aparelhos.</p>
+                    <div class="theme-options" role="group" aria-label="Escolha seu tema">
+                        <button class="theme-option" type="button" data-ui-action="selectPersonalTheme" data-theme="bc2" aria-pressed="false"><span class="theme-swatch theme-swatch-bc2"><i></i><i></i><i></i></span><strong>BC2 atual</strong></button>
+                        <button class="theme-option" type="button" data-ui-action="selectPersonalTheme" data-theme="light" aria-pressed="false"><span class="theme-swatch theme-swatch-light"><i></i><i></i><i></i></span><strong>Claro</strong></button>
+                        <button class="theme-option" type="button" data-ui-action="selectPersonalTheme" data-theme="black" aria-pressed="false"><span class="theme-swatch theme-swatch-black"><i></i><i></i><i></i></span><strong>Escuro</strong></button>
+                        <button class="theme-option" type="button" data-ui-action="selectPersonalTheme" data-theme="aurora" aria-pressed="false"><span class="theme-swatch theme-swatch-aurora"><i></i><i></i><i></i></span><strong>Aurora</strong></button>
+                    </div>
+                    <p id="personalThemeFeedback" class="settings-feedback" role="status"></p>
+                </article>
+                <article class="personal-settings-card">
+                    <h3>Mudar senha</h3>
+                    <p class="muted">Confirme sua senha atual. A nova senha deve ter ao menos 12 caracteres, com maiúscula, minúscula, número e símbolo.</p>
+                    <form id="passwordChangeForm" data-ui-submit="changePersonalPassword">
+                        <div class="field"><label for="currentPassword">Senha atual</label><input id="currentPassword" type="password" autocomplete="current-password" required></div>
+                        <div class="field"><label for="newPersonalPassword">Nova senha</label><input id="newPersonalPassword" type="password" minlength="12" autocomplete="new-password" required></div>
+                        <div class="field"><label for="confirmPersonalPassword">Confirme a nova senha</label><input id="confirmPersonalPassword" type="password" minlength="12" autocomplete="new-password" required></div>
+                        <div class="toolbar"><button class="btn" type="submit">Trocar senha</button><button class="btn secondary" type="button" data-ui-action="sendPasswordChangeLink">Enviar link por e-mail</button></div>
+                    </form>
+                    <p id="passwordChangeFeedback" class="settings-feedback" role="status"></p>
+                </article>
+                <article class="personal-settings-card">
+                    <h3>Trocar e-mail</h3>
+                    <p class="muted">Confirme sua senha atual e depois abra o link enviado ao novo endereço. Seu nível de acesso será mantido.</p>
+                    <form id="emailChangeForm" data-ui-submit="requestEmailChange">
+                        <div class="field"><label for="emailChangeCurrentPassword">Senha atual</label><input id="emailChangeCurrentPassword" type="password" autocomplete="current-password" required></div>
+                        <div class="field"><label for="newEmailAddress">Novo e-mail</label><input id="newEmailAddress" type="email" autocomplete="email" required></div>
+                        <div class="field"><label for="confirmNewEmailAddress">Confirme o novo e-mail</label><input id="confirmNewEmailAddress" type="email" autocomplete="email" required></div>
+                        <div class="toolbar"><button class="btn" type="submit">Enviar confirmação</button></div>
+                    </form>
+                    <p id="emailChangeFeedback" class="settings-feedback" role="status"></p>
+                </article>
+            <article class="personal-settings-card install-app-card">
+                <h3>Aplicativo BC2</h3>
+                <button id="installAppButton" class="btn" type="button">Fazer download do aplicativo</button>
+                <p>Instale o BC2 na tela inicial. Uso somente com internet.</p>
+                <p id="installAppFeedback" role="status"></p>
+            </article>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section active">
+            <h2>Visão geral</h2>
+            <p class="subtitle">Acompanhe o estoque, os equipamentos e as pendências cadastradas.</p>
+            <div class="grid" id="stats"></div>
+            <div class="notice">Os indicadores são calculados a partir dos registros cadastrados. Campos sem informação
+                não são tratados como datas confirmadas.</div>
+            <div class="panel shortage-panel">
+                <div class="section-heading">
+                    <div>
+                        <h3>EPIs abaixo do mínimo</h3>
+                        <p class="muted">Os itens são atualizados conforme o saldo muda. A quantidade em vermelho mostra o que está disponível.</p>
+                    </div>
+                    <button class="btn secondary small no-print" type="button" data-ui-action="openStockTab">Abrir estoque</button>
+                </div>
+                <div id="stockShortages" class="shortage-list" aria-live="polite"></div>
+            </div>
+            <div class="two">
+                <div class="panel">
+                    <h3>Alertas de validade</h3>
+                    <div id="expiryAlerts"></div>
+                </div>
+                <div class="panel">
+                    <h3>Próximas inspeções</h3>
+                    <div id="inspectionAlerts"></div>
+                </div>
+            </div>
+            <div class="panel" style="margin-top:16px">
+                <h3>Movimentações recentes</h3>
+                <div id="recentMoves"></div>
+            </div>
+        </section>
+
+        <section id="epis" class="section">
+            <h2 id="epiStockHeading">Estoque de EPIs</h2>
+            <p class="subtitle" id="epiStockSubtitle">Organize seus EPIs em pastas e consulte os saldos por tamanho.</p>
+            <div class="toolbar no-print" id="epiStockToolbar">
+                <input id="epiSearch" placeholder="Buscar EPI, pasta, numeração ou CA..."
+                    data-ui-input="renderEpis">
+                <button class="btn" data-ui-action="openEpi">+ Cadastrar EPI</button>
+                <button class="btn secondary" type="button" data-ui-action="createEpiFolder">+ Criar pasta</button>
+            </div>
+            <div id="epiFolders" class="epi-folder-grid"></div>
+            <details id="epiZeroStockSection" class="epi-zero-stock no-print" hidden>
+                <summary>Cadastros sem saldo no estoque (<span id="epiZeroStockCount">0</span>)</summary>
+                <p>Esses itens estão sem unidades disponíveis. Os EPIs entregues a colaboradores são consultados nas abas Colaboradores e Movimentações.</p>
+                <div id="epiZeroFolders" class="epi-folder-grid"></div>
+            </details>
+            <div id="epiFolderContents" hidden>
+                <div class="epi-folder-toolbar no-print">
+                    <button class="btn secondary" type="button" data-ui-action="closeEpiFolder">← Voltar ao estoque</button>
+                    <div><h2 id="epiFolderTitle" tabindex="-1"></h2><p id="epiFolderSummary" class="epi-folder-summary"></p></div>
+
+                </div>
+                <div class="epi-folder-actions no-print" id="epiFolderActions">
+                    <button class="btn" type="button" data-ui-action="openEpi">+ Cadastrar EPI nesta pasta</button>
+                    <button class="btn secondary" type="button" id="addExistingEpiButton" data-ui-action="addExistingEpiToFolder">+ Adicionar EPI existente</button>
+                </div>
+                <div class="toolbar"><input id="epiFolderSearch" aria-label="Buscar nesta pasta" placeholder="Buscar EPI, tamanho ou CA nesta pasta" data-ui-input="renderEpis"></div>
+                <div id="epiVariantGrid"></div>
+            </div>
+        </section>
+
+        <section id="scanner" class="section">
+            <h2>Leitor de códigos de barras e QR</h2>
+            <div class="toolbar"><button class="btn" type="button" data-ui-action="openNewEpi">+ Escanear e cadastrar EPI novo</button></div>
+            <p class="subtitle">Leia o código para identificar o produto, conferir os dados disponíveis e usá-los no
+                cadastro do estoque.</p>
+            <div class="notice">A busca consulta o catálogo da empresa e uma base pública ampla, que reúne catálogos de alimentos, beleza, produtos gerais e produtos para animais. Essas bases podem não conter EPIs; confira os dados na embalagem e na ficha do fabricante. A
+                câmera requer
+                HTTPS ou localhost. Na busca pública, somente o código é enviado para consulta; os registros do BC2 não
+                são enviados.</div>
+            <div class="two">
+                <div class="panel">
+                    <h3>Ler código em uma foto</h3>
+                    <div id="scannerVideoPlaceholder" class="scanner-placeholder">
+                        <video id="scannerVideo" class="scanner-video" autoplay muted playsinline
+                            aria-label="Imagem captada pela câmera para leitura do código"></video>
+                        <span id="scannerEmptyHint" class="scanner-empty-hint">Abra a câmera para fotografar o código ou carregue uma foto da galeria.</span>
+                    </div>
+                    <p class="muted">Abra a câmera, enquadre um único código e toque em Tirar foto e ler. A câmera desliga logo após a foto. Você também pode escolher uma foto da galeria.</p>
+                    <div class="toolbar no-print">
+                        <button class="btn" id="startScanner" type="button" data-ui-action="startScanner">Abrir câmera</button>
+                        <button class="btn secondary" id="stopScanner" type="button" data-ui-action="stopScanner"
+                            disabled>Parar câmera</button>
+                        <button class="btn secondary" id="scannerPhotoButton" type="button" data-ui-action="openScannerPhoto">Carregar foto da galeria</button>
+                        <input id="scannerPhotoInput" type="file" accept="image/*" data-ui-change="readScannerPhoto" aria-label="Selecionar foto com código de barras ou QR" hidden>
+                    </div>
+                    <p id="scannerStatus" class="muted" role="status">A câmera será ativada somente após sua
+                        autorização. A foto é lida neste aparelho e não é enviada ao servidor.</p>
+                    <div id="scannerPhotoResult" class="scanner-photo-result" hidden>
+                        <canvas id="scannerPhotoPreview" role="img" aria-label="Foto escolhida para ler o código"></canvas>
+                        <div id="scannerCodeChoices" class="toolbar"></div>
+                        <button class="btn secondary small" type="button" data-ui-action="clearScannerPhoto">Limpar foto</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>Ler ou informar o código</h3>
+                    <p class="muted">Digite o código ou use um leitor USB/Bluetooth para ver o nome e os dados
+                        disponíveis do produto.</p>
+                    <div class="toolbar">
+                        <input id="barcodeInput" placeholder="Código de barras" autocomplete="off"
+                            aria-label="Código de barras">
+                        <button class="btn" type="button" data-ui-action="lookupBarcode">Localizar</button>
+                    </div>
+                    <div id="barcodeResult" class="scan-result" aria-live="polite"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="employees" class="section">
+            <h2>Colaboradores</h2>
+            <p class="subtitle">Mantenha as fichas individuais e consulte os EPIs entregues a cada pessoa.</p>
+            <div class="toolbar no-print">
+                <input id="empSearch" placeholder="Buscar por nome, matrícula, função ou equipe..." data-ui-input="renderEmployees">
+                <button id="employeeImportButton" class="btn secondary" type="button" data-ui-action="openEmployeeImport">Importar planilha</button>
+                <input id="employeeImportFile" type="file" accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv" hidden data-ui-change="handleEmployeeImportFile">
+                <button class="btn" data-ui-action="openEmployee">+ Cadastrar colaborador</button>
+            </div>
+            <p class="field-hint no-print">Aceita Excel (.xlsx) ou CSV, com colunas Nome, Matrícula, Função e Equipe/Setor. A planilha é lida neste aparelho e só é enviada ao banco depois da sua confirmação.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>Função</th>
+                            <th>Setor</th>
+                            <th>EPIs em posse</th>
+                            <th>Situação</th>
+                            <th class="no-print">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="empRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="movements" class="section">
+            <h2>Entregas e movimentações</h2>
+            <p class="subtitle">Registre a saída e o retorno de equipamentos, mantendo o histórico individual.</p>
+            <div class="toolbar no-print">
+                <input id="moveSearch" placeholder="Buscar por colaborador, EPI ou observação..."
+                    data-ui-input="renderMovements">
+                <select id="moveType" data-ui-change="renderMovements">
+                    <option value="">Todos os movimentos</option>
+                    <option>Entrega</option>
+                    <option>Devolução</option>
+                    <option>Baixa</option>
+                    <option>Ajuste positivo</option>
+                    <option>Ajuste negativo</option>
+                </select>
+                <button class="btn" data-ui-action="openMovement">+ Nova movimentação</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Colaborador</th>
+                            <th>EPI</th>
+                            <th>Quantidade</th>
+                            <th>Código da unidade / série</th>
+                            <th>Responsável / observação</th>
+                            <th class="no-print">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="moveRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="inspections" class="section">
+            <h2>Inspeções e testes</h2>
+            <p class="subtitle">Registre verificações, resultados e a próxima data programada quando aplicável.</p>
+            <div class="notice">A periodicidade deve ser definida com base no fabricante, no procedimento de segurança e
+                nos requisitos aplicáveis. Não existe um intervalo universal para todos os EPIs.</div>
+            <div class="toolbar no-print">
+                <input id="inspSearch" placeholder="Buscar EPI, responsável ou resultado..."
+                    data-ui-input="renderInspections">
+                <button class="btn" data-ui-action="openInspection">+ Registrar inspeção</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>EPI</th>
+                            <th>Tipo de verificação</th>
+                            <th>Resultado</th>
+                            <th>Próxima data</th>
+                            <th>Responsável</th>
+                            <th>Observações</th>
+                            <th class="no-print">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inspRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="reports" class="section">
+            <h2>Relatórios e backup</h2>
+            <p class="subtitle">Exporte os dados para guardar cópias e consultar registros fora do sistema.</p>
+            <div class="two">
+                <div class="panel">
+                    <h3>Relatórios</h3>
+                    <p class="muted">Gere uma versão para impressão ou salve como PDF pelo navegador.</p>
+                    <div class="toolbar"><button class="btn" data-ui-action="printStockReport">Relatório de
+                            estoque</button></div>
+                    <div class="toolbar"><button class="btn" data-ui-action="printEmployeeReport">Relatório de
+                            colaboradores</button></div>
+                    <div class="toolbar"><button class="btn" data-ui-action="printMovementReport">Histórico de
+                            movimentações</button></div>
+                    <div class="toolbar"><button class="btn" data-ui-action="printInspectionReport">Relatório de
+                            inspeções</button></div>
+                </div>
+                <div class="panel">
+                    <h3>Backup dos dados</h3>
+                    <p class="muted">Exporte uma cópia completa em JSON. Guarde-a em local seguro.</p>
+                    <div class="toolbar"><button class="btn" data-ui-action="exportBackup">Exportar backup</button></div>
+                    <label class="muted" for="importFile">Restaurar backup JSON</label>
+                    <input id="importFile" type="file" accept=".json,application/json" style="margin-top:8px">
+                    <div class="toolbar"><button class="btn secondary" data-ui-action="importBackup">Importar backup</button>
+                    </div>
+                    <p class="muted" style="font-size:12px">Importar substitui os dados atuais. Exporte um backup antes
+                        de restaurar.</p>
+                </div>
+            </div>
+            <div class="panel" id="localMigrationPanel" style="margin-top:16px" hidden>
+                <h3>Dados encontrados neste navegador</h3>
+                <p class="muted">Há cadastros da versão anterior guardados neste aparelho. Eles não serão apagados.
+                    Depois de guardar um backup, você pode enviar uma cópia ao banco central uma única vez.</p>
+                <button class="btn" type="button" data-ui-action="migrateLocalData">Enviar cópia ao banco central</button>
+            </div>
+        </section>
+
+        <section id="support" class="section">
+            <h2>Contatos e Suporte</h2>
+            <p class="subtitle">Use estes canais para tirar dúvidas, enviar críticas, relatar erros ou pedir ajuda com seus dados.</p>
+            <div class="support-grid">
+                <article class="support-card">
+                    <h3>WhatsApp</h3>
+                    <p>Atendimento direto pelo WhatsApp: <strong>PREENCHER_TELEFONE_DE_SUPORTE</strong>.</p>
+                    <div class="support-actions">
+                        <a class="btn" href="https://wa.me/PREENCHER_WHATSAPP_DE_SUPORTE?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20o%20sistema%20BC2%20Controle%20de%20EPIs." target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+                    </div>
+                </article>
+                <article class="support-card">
+                    <h3>E-mail de suporte</h3>
+                    <p>Escreva para <strong>admin@example.com</strong> para dúvidas, sugestões ou críticas.</p>
+                    <div class="support-actions">
+                        <a class="btn secondary" href="mailto:admin@example.com?subject=Ajuda%20com%20BC2%20Controle%20de%20EPIs">Enviar e-mail</a>
+                    </div>
+                </article>
+                <article class="support-card">
+                    <h3>Relatar erro ou problema</h3>
+                    <p>Conte o que aconteceu, qual tela estava usando e em que horário. Não envie senhas nem dados de outras pessoas se não forem necessários.</p>
+                    <div class="support-actions">
+                        <a class="btn secondary" href="mailto:admin@example.com?subject=Relato%20de%20problema%20no%20BC2&body=O%20que%20aconteceu%3F%0AEm%20qual%20tela%3F%0AQual%20aparelho%20e%20navegador%3F%0AEm%20que%20hor%C3%A1rio%3F%0A">Relatar problema por e-mail</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="users" class="section">
+            <div id="usersHome">
+                <h2>Usuários e níveis de acesso</h2>
+                <p class="subtitle">Escolha uma área para continuar.</p>
+                <div class="users-folder-grid">
+                    <button class="users-folder-card" type="button" data-ui-action="openUserRequests">
+                        <span class="users-folder-icon" aria-hidden="true">✉</span>
+                        <strong>Pedidos de acesso</strong>
+                        <span>Revise quem solicitou acesso, escolha o nível e aprove ou recuse.</span>
+                        <span class="users-folder-count"><span id="pendingRequestCount">0</span> pendente(s) →</span>
+                    </button>
+                    <button class="users-folder-card" type="button" data-ui-action="openUserRoles">
+                        <span class="users-folder-icon" aria-hidden="true">▤</span>
+                        <strong>Níveis de acesso</strong>
+                        <span>Crie níveis e defina o que cada um pode consultar ou alterar.</span>
+                        <span class="users-folder-count"><span id="accessRoleCount">0</span> nível(is) →</span>
+                    </button>
+                </div>
+            </div>
+            <div id="usersRequestsPage" class="users-page" hidden>
+                <div class="users-page-heading">
+                    <button class="btn secondary" type="button" data-ui-action="showUsersHome">← Voltar</button>
+                    <div><h2>Pedidos de acesso</h2><p class="subtitle">A pessoa permanece bloqueada até você escolher o nível e aprovar o pedido.</p></div>
+                </div>
+                <div class="panel"><div id="pendingUsers" class="muted">Carregando...</div></div>
+            </div>
+            <div id="usersRolesPage" class="users-page" hidden>
+                <div class="users-page-heading"><button class="btn secondary" type="button" data-ui-action="showUsersHome">← Voltar</button><div><h2 id="usersRolesPageTitle" tabindex="-1">Níveis de acesso</h2><p class="subtitle">Escolha o que deseja fazer.</p></div></div>
+                <div class="users-folder-grid">
+                    <button class="users-folder-card" type="button" data-ui-action="openApprovedLevels"><strong>Nível das pessoas aprovadas</strong><span>Consulte e altere o nível de cada pessoa aprovada.</span><span aria-hidden="true">→</span></button>
+                    <button class="users-folder-card" type="button" data-ui-action="openEditLevels"><strong>Editar níveis</strong><span>Altere o nome e as permissões de um nível existente.</span><span aria-hidden="true">→</span></button>
+                    <button class="users-folder-card" type="button" data-ui-action="openCreateLevels"><strong>Criação de níveis</strong><span>Crie um nível com nome e permissões próprios.</span><span aria-hidden="true">→</span></button>
+                </div>
+            </div>
+            <div id="usersApprovedPage" class="users-page" hidden>
+                <div class="users-page-heading"><button class="btn secondary" type="button" data-ui-action="openUserRoles">← Voltar</button><div><h2 id="usersApprovedPageTitle" tabindex="-1">Nível das pessoas aprovadas</h2><p class="subtitle">Escolha o nível de uma pessoa e salve a alteração.</p></div></div>
+                <div class="panel"><div id="activeUsers" class="muted">Carregando...</div></div>
+            </div>
+            <div id="usersEditRolesPage" class="users-page" hidden>
+                <div class="users-page-heading"><button class="btn secondary" type="button" data-ui-action="openUserRoles">← Voltar</button><div><h2 id="usersEditRolesPageTitle" tabindex="-1">Editar níveis</h2><p class="subtitle">Escolha um nível existente para mudar seu nome ou suas permissões.</p></div></div>
+                <div class="panel">
+                    <div class="field"><label for="rolePicker">Nível que deseja editar</label><select id="rolePicker" data-ui-change="selectRoleForEdit"></select></div>
+                    <div class="field"><label for="roleName">Nome do nível</label><input id="roleName" maxlength="80" placeholder="Ex.: Almoxarife"></div><div class="table-wrap"><table class="permission-matrix"><thead id="rolePermissionHead"></thead><tbody id="rolePermissionRows"></tbody></table></div>
+                    <div class="toolbar"><button id="saveRoleButton" class="btn" type="button" data-ui-action="saveRole">Salvar alterações</button><button id="deleteRoleButton" class="btn danger" type="button" data-ui-action="deleteRole">Remover nível selecionado</button></div>
+                    <p id="roleEditorNotice" class="muted">As pessoas vinculadas continuam no mesmo nível quando o nome muda.</p>
+                </div>
+            </div>
+            <div id="usersCreateRolePage" class="users-page" hidden>
+                <div class="users-page-heading"><button class="btn secondary" type="button" data-ui-action="openUserRoles">← Voltar</button><div><h2 id="usersCreateRolePageTitle" tabindex="-1">Criação de níveis</h2><p class="subtitle">Informe o nome e escolha o que o novo nível poderá fazer.</p></div></div>
+                <div class="panel">
+                    <div class="field"><label for="createRoleName">Nome do nível</label><input id="createRoleName" maxlength="80" placeholder="Ex.: Almoxarife"></div><div class="table-wrap"><table class="permission-matrix"><thead id="createRolePermissionHead"></thead><tbody id="createRolePermissionRows"></tbody></table></div>
+                    <button class="btn" type="button" data-ui-action="createRole">Criar nível</button>
+                    <p class="muted">Depois de criar, atribua o nível em Nível das pessoas aprovadas.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="audit" class="section">
+            <h2>Log do site</h2>
+            <p class="subtitle">Histórico central das alterações, com a pessoa autenticada e os campos que foram
+                modificados.</p>
+            <div class="toolbar"><button class="btn secondary" type="button" data-ui-action="loadAuditLog">Atualizar
+                    histórico</button></div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data e hora</th>
+                            <th>Pessoa</th>
+                            <th>E-mail</th>
+                            <th>Nível</th>
+                            <th>Ação</th>
+                            <th>Área / registro</th>
+                            <th>Campos alterados</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>BC2 Infra Estrutura · Controle protegido de equipamentos de proteção individual</footer>
+    </main>
+
+    <div id="scannerFullscreen" class="scanner-fullscreen" hidden aria-label="Leitor de código pela câmera">
+        <button id="scannerExit" class="scanner-exit" type="button" data-ui-action="stopScanner" aria-label="Sair e desligar a câmera">Sair ✕</button>
+        <p id="scannerCaptureHint" class="scanner-capture-hint" role="status">Abrindo câmera…</p>
+        <button id="scannerCapture" class="btn scanner-capture" type="button" data-ui-action="captureScannerPhoto" disabled>Tirar foto e ler</button>
+        <div class="scanner-zoom-controls" aria-label="Controles de zoom da câmera">
+            <button id="scannerZoomOut" type="button" aria-label="Diminuir zoom" data-ui-action="zoomOut">−</button>
+            <input id="scannerZoomRange" type="range" min="1" max="3" step="0.1" value="1" aria-label="Zoom da câmera" data-ui-input="setScannerZoom">
+            <button id="scannerZoomIn" type="button" aria-label="Aumentar zoom" data-ui-action="zoomIn">+</button>
+            <span id="scannerZoomLabel" class="scanner-zoom-label">1,0×</span>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 id="modalTitle">Cadastro</h3><button class="btn secondary small"
+                    data-ui-action="closeModal">Fechar</button>
+            </div>
+            <form id="modalForm">
+                <div id="modalFields" class="form-grid"></div>
+                <div class="modal-actions"><button type="button" class="btn secondary"
+                        data-ui-action="closeModal">Cancelar</button><button class="btn" type="submit">Salvar</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="accessGate" class="access-gate" role="status" aria-live="polite">
+        <div id="accessGateCard" class="access-gate-card">
+            <div id="authBrand" class="auth-brand">
+                <div class="logo" aria-hidden="true">BC2</div>
+                <div><h1>BC2 Controle de EPIs</h1><p>Gestão segura de equipamentos de proteção</p></div>
+            </div>
+            <h2 id="accessGateTitle">Verificando seu acesso</h2>
+            <p id="accessGateMessage" class="muted">Aguarde enquanto confirmamos sua conta.</p>
+            <div id="firebaseAuthControls" hidden>
+                <div id="authChoiceView" class="auth-choice-grid" hidden>
+                    <button class="auth-choice" type="button" data-ui-action="openLogin">
+                        <span class="auth-choice-mark" aria-hidden="true">↪</span>
+                        <strong>Entrar</strong>
+                        <span>Já tenho cadastro e quero acessar o sistema.</span>
+                    </button>
+                    <button class="auth-choice" type="button" data-ui-action="openAccessRequest">
+                        <span class="auth-choice-mark" aria-hidden="true">＋</span>
+                        <strong>Pedir autorização</strong>
+                        <span>Criar conta, confirmar meu e-mail e pedir aprovação do Administrador.</span>
+                    </button>
+                </div>
+                <form id="authFormView" class="auth-form-view" data-ui-submit="submitAuthForm" hidden>
+                    <h2 id="authFormTitle">Entrar</h2>
+                    <p id="authFormDescription" class="subtitle">Informe seu e-mail e senha.</p>
+                    <div id="authNameField" class="field" hidden><label for="authName">Nome completo</label><input id="authName"
+                            maxlength="120" autocomplete="name"></div>
+                    <div class="field"><label for="authEmail">E-mail</label><input id="authEmail" type="email"
+                            autocomplete="email" required></div>
+                    <div id="authPasswordField" class="field" hidden><label for="authPassword">Senha</label><input id="authPassword" type="password"
+                            minlength="6" autocomplete="current-password"></div>
+                    <p id="authPasswordHelp" class="muted" hidden>Use pelo menos 12 caracteres, com letra maiúscula, minúscula, número e símbolo.</p>
+                    <div id="authConfirmPasswordField" class="field" hidden><label for="authConfirmPassword">Confirme a senha</label><input id="authConfirmPassword" type="password" minlength="12" autocomplete="new-password"></div>
+                    <button id="authSubmitButton" class="btn auth-submit" type="submit">Entrar</button>
+                    <button id="authForgotButton" class="auth-back" style="margin-top:14px" type="button" data-ui-action="resetAuthPassword">Esqueci minha senha</button>
+                    <p id="authFeedback" class="auth-feedback muted" aria-live="polite"></p>
+                    <button class="auth-back auth-back-bottom" type="button" data-ui-action="showAuthChoices">← Voltar</button>
+                </form>
+                <button id="mobileRequestAccess" type="button" class="mobile-auth-request" data-ui-action="openAccessRequest" hidden>Ainda não tem acesso? Pedir autorização</button>
+                <div id="pendingPasswordControls" class="pending-password-box" hidden>
+                    <h3>Crie uma senha para as próximas entradas</h3>
+                    <p>Depois de confirmar seu e-mail, escolha uma senha. Você poderá entrar com e-mail e senha enquanto o Administrador analisa seu pedido.</p>
+                <div class="field"><label for="newAccountPassword">Nova senha (12 caracteres ou mais)</label><input id="newAccountPassword" type="password" minlength="12" autocomplete="new-password"></div>
+                <div class="field" style="margin-top:12px"><label for="confirmAccountPassword">Confirme a nova senha</label><input id="confirmAccountPassword" type="password" minlength="12" autocomplete="new-password"></div>
+                    <button class="btn auth-submit" type="button" data-ui-action="setPasswordAfterEmailLink">Salvar senha e acompanhar pedido</button>
+                    <p id="pendingPasswordFeedback" class="auth-feedback muted" aria-live="polite"></p>
+                </div>
+            </div>
+            <button id="accessGateRetry" class="btn" type="button" data-ui-action="bootSecureApp" hidden>Tentar
+                novamente</button>
+            <button id="accessGateSignOut" class="btn secondary" type="button" data-ui-action="signOut" hidden>Sair</button>
+        </div>
+    </div>
+
+    <dialog id="installAppHelp" class="install-app-help" aria-labelledby="installAppHelpTitle">
+        <h2 id="installAppHelpTitle">Instalar o aplicativo BC2</h2>
+        <p>O BC2 será instalado pelo navegador e abrirá pelo ícone, sem a barra de endereço. Ele precisa de internet para funcionar.</p>
+        <ol id="installAppSteps"></ol>
+        <button id="installAppClose" class="btn" type="button">Entendi, voltar</button>
+    </dialog>
+    <script src="./install-app.js"></script>
+    <script src="./scanner-photo.js"></script>
+    <script src="./firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-auth-compat.js"></script>
+    <script src="./epi-core.js"></script>
+    <script src="./auth-registration.js"></script>
+    <script src="./record-client.js?v=download-conta-20261109"></script>
+    <script src="./connection.js"></script>
+    <script src="./epi-folders.js"></script>
+    <script src="./app.js?v=download-conta-20261109"></script>
+    <script src="./mobile-ui.js?v=download-conta-20261109"></script>
+    <script src="./epi-central.js"></script>
+    <script src="./epi-cadastro.js"></script>
+</body>
+
+</html>
